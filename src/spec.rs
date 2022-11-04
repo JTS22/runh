@@ -16,6 +16,7 @@ pub fn create_spec(bundle: Option<&str>, args: Vec<String>) {
 		)
 		.build()
 		.unwrap();
+
 	spec.save(&config_file.to_str().unwrap())
 		.expect("Unable to write new specification file");
 }

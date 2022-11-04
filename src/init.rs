@@ -654,7 +654,7 @@ fn init_stage(args: SetupArgs) -> isize {
 					.to_owned();
 				let kernel_path = app_root.join("rusty-loader");
 				let kernel = kernel_path.as_os_str().to_str().unwrap();
-				hermit::get_qemu_args(
+				hermit::get_fc_args(
 					kernel,
 					app,
 					&hermit_network_config,

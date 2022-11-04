@@ -4,14 +4,15 @@ use goblin::elf64::header::EI_OSABI;
 use std::{fs, path::PathBuf};
 
 pub fn is_hermit_app(path: &PathBuf) -> bool {
-	let buffer = fs::read(path)
-		.expect(format!("Could not read content of args-executable at {:?}", path).as_str());
-	if let Ok(elf) = elf::Elf::parse(&buffer) {
-		return elf.header.e_ident[EI_OSABI] == 0xFF;
-	} else {
-		warn!("Could not parse content of args-executable in ELF format. Might be a script file. Assuming non-hermit container...");
-		return false;
-	}
+	// let buffer = fs::read(path)
+	// 	.expect(format!("Could not read content of args-executable at {:?}", path).as_str());
+	// if let Ok(elf) = elf::Elf::parse(&buffer) {
+	// 	return elf.header.e_ident[EI_OSABI] == 0xFF;
+	// } else {
+	// 	warn!("Could not parse content of args-executable in ELF format. Might be a script file. Assuming non-hermit container...");
+	// 	return false;
+	// }
+	true
 }
 
 pub fn create_environment(_path: &PathBuf) {
@@ -35,6 +36,25 @@ pub fn prepare_environment(project_dir: &PathBuf, hermit_env_path: &Option<&str>
 			&environment_path
 		);
 	}
+}
+
+pub fn get_fc_args(
+	_kernel: &str,
+	_app: &str,
+	_netconf: &Option<network::HermitNetworkConfig>,
+	_app_args: &Vec<String>,
+	_micro_vm: bool,
+) -> Vec<String> {
+	vec![
+		"/firecracker",
+		"--api-sock",
+		"/tmp/firecracker.socket",
+		"--config-file",
+		"/firecracker_config.json",
+	]
+	.iter()
+	.map(|s| s.to_string())
+	.collect()
 }
 
 pub fn get_qemu_args(
